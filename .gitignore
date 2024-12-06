@@ -1,5 +1,5 @@
 # github's golang gitignore example
-*.db
+test.db
 *.exe
 *.exe~
 *.dll
