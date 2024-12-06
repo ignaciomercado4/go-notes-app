@@ -32,7 +32,7 @@ func (h *NoteHandler) CreateNote(c *gin.Context) {
 		}
 	}
 
-	c.JSON(http.StatusCreated, newNote)
+	c.Redirect(http.StatusSeeOther, "/")
 }
 
 func (h *NoteHandler) GetIndex(c *gin.Context) {
