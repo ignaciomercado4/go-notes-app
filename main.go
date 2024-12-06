@@ -1,7 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
-	fmt.Println("Helloo")
+	r := gin.Default()
+
+	r.LoadHTMLGlob("templates/*")
+
+	r.GET("/", getIndex)
+
+	r.Run()
 }
