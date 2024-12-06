@@ -4,14 +4,48 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func createNote(c *gin.Context) {
-
+type NoteHandler struct {
+	DB *gorm.DB
 }
 
-func getIndex(c *gin.Context) {
+func (h *NoteHandler) CreateNote(c *gin.Context) {
+	var newNote Note
+
+	if err := c.ShouldBind(&newNote); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Binding error",
+			"details": err.Error(),
+		})
+
+		return
+	}
+
+	result := h.DB.Create(&newNote)
+
+	if result != nil {
+		if result.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+			return
+		}
+	}
+
+	c.JSON(http.StatusCreated, newNote)
+}
+
+func (h *NoteHandler) GetIndex(c *gin.Context) {
+	var notes []Note
+
+	result := h.DB.Find(&notes)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
-		"title": "Notitas",
+		"notes": notes,
 	})
 }

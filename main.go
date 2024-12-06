@@ -18,9 +18,11 @@ func main() {
 
 	r.LoadHTMLGlob("templates/*")
 
-	r.GET("/", getIndex)
+	noteHandler := &NoteHandler{DB: db}
 
-	r.POST("/create", createNote)
+	r.GET("/", noteHandler.GetIndex)
+
+	r.POST("/create", noteHandler.CreateNote)
 
 	r.Run()
 }
