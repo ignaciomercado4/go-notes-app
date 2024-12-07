@@ -12,9 +12,33 @@ type NoteHandler struct {
 	DB *gorm.DB
 }
 
-// Users
-func (h *NoteHandler) Register(c *gin.Context) {
+// User auth
+func GetRegistrationForm(c *gin.Context) {
+	c.HTML(http.StatusOK, "registrationForm.tmpl", gin.H{
+		"title": "Register",
+	})
+}
 
+func GetLoginForm(c *gin.Context) {
+	c.HTML(http.StatusOK, "loginForm.tmpl", gin.H{
+		"title": "login",
+	})
+}
+
+// Index
+func (h *NoteHandler) GetIndex(c *gin.Context) {
+	var notes []models.Note
+
+	result := h.DB.Find(&notes)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
+
+	c.HTML(http.StatusOK, "index.tmpl", gin.H{
+		"notes": notes,
+	})
 }
 
 // Notes
@@ -40,19 +64,4 @@ func (h *NoteHandler) CreateNote(c *gin.Context) {
 	}
 
 	c.Redirect(http.StatusSeeOther, "/")
-}
-
-func (h *NoteHandler) GetIndex(c *gin.Context) {
-	var notes []models.Note
-
-	result := h.DB.Find(&notes)
-
-	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
-		return
-	}
-
-	c.HTML(http.StatusOK, "index.tmpl", gin.H{
-		"notes": notes,
-	})
 }

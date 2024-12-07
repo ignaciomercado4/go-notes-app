@@ -13,6 +13,8 @@ func main() {
 
 	noteHandler := &NoteHandler{DB: db}
 
+	r.GET("/register", GetRegistrationForm)
+
 	r.GET("/", noteHandler.GetIndex)
 
 	r.POST("/create", noteHandler.CreateNote)
