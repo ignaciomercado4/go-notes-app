@@ -14,7 +14,7 @@ func main() {
 		panic("failed to connect database")
 	}
 
-	db.AutoMigrate(&Note{})
+	db.AutoMigrate(&Note{}, &User{})
 
 	r.LoadHTMLGlob("templates/*")
 
