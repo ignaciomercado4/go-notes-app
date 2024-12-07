@@ -1,12 +1,6 @@
-package main
+package models
 
 import "gorm.io/gorm"
-
-type Note struct {
-	gorm.Model
-	Title   string `gorm:"not null"`
-	Content string `gorm:"not null"`
-}
 
 type User struct {
 	gorm.Model

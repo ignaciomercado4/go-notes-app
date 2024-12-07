@@ -1,6 +1,7 @@
 package main
 
 import (
+	"go-notes-app/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,8 +12,14 @@ type NoteHandler struct {
 	DB *gorm.DB
 }
 
+// Users
+func (h *NoteHandler) Register(c *gin.Context) {
+
+}
+
+// Notes
 func (h *NoteHandler) CreateNote(c *gin.Context) {
-	var newNote Note
+	var newNote models.Note
 
 	if err := c.ShouldBind(&newNote); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -36,7 +43,7 @@ func (h *NoteHandler) CreateNote(c *gin.Context) {
 }
 
 func (h *NoteHandler) GetIndex(c *gin.Context) {
-	var notes []Note
+	var notes []models.Note
 
 	result := h.DB.Find(&notes)
 

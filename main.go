@@ -1,6 +1,8 @@
 package main
 
 import (
+	"go-notes-app/models"
+
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -14,7 +16,7 @@ func main() {
 		panic("failed to connect database")
 	}
 
-	db.AutoMigrate(&Note{}, &User{})
+	db.AutoMigrate(&models.User{}, &models.Note{})
 
 	r.LoadHTMLGlob("templates/*")
 
