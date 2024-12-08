@@ -16,6 +16,7 @@ func main() {
 	r.GET("/login", GetLoginForm)
 
 	r.GET("/register", GetRegistrationForm)
+	r.POST("/register", noteHandler.CreateUser)
 
 	r.GET("/", noteHandler.GetIndex)
 
