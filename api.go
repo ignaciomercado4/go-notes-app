@@ -184,7 +184,14 @@ func (h *NoteHandler) CreateNote(c *gin.Context) {
 func (h *NoteHandler) DeleteNote(c *gin.Context) {
 	noteId := c.Param("id")
 
-	h.DB.Delete(&models.User{}, noteId)
+	result := h.DB.Delete(&models.Note{}, noteId)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to delete note",
+		})
+		return
+	}
 
 	c.Redirect(http.StatusSeeOther, "/")
 }
