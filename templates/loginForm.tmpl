@@ -17,21 +17,21 @@
         <div class="bg-white shadow-md rounded-lg">
             <form action="/login" method="POST" id="loginForm" class="p-6">
                 <div class="mb-4">
-                    <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                    <label for="Username" class="block text-gray-700 text-sm font-bold mb-2">Username</label>
                     <input 
-                        type="email" 
-                        name="email" 
-                        id="email" 
-                        placeholder="your.email@example.com"
+                        type="text" 
+                        name="Username" 
+                        id="username" 
+                        placeholder="Noteman"
                         class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                 </div>
 
                 <div class="mb-6">
-                    <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                    <label for="Password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
                     <input 
                         type="password" 
-                        name="password" 
+                        name="Password" 
                         id="password" 
                         placeholder="********"
                         class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -52,13 +52,13 @@
 
     <script>
         document.querySelector('#loginForm').addEventListener('submit', function(event) {
-            const email = document.querySelector('#email').value;
+            const email = document.querySelector('#username').value;
             const password = document.querySelector('#password').value;
             const errorEl = document.querySelector('#error');
 
             if (!email || !password) {
                 event.preventDefault();
-                errorEl.textContent = "Email and password are required!";
+                errorEl.textContent = "Username and password are required!";
             } else {
                 errorEl.textContent = "";
             }
