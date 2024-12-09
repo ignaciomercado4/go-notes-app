@@ -2,6 +2,9 @@
 ---
 This repository contains a simple note-taking app, developed using Go, Gin, GORM, text/template, and SQLite. It was built primarily for learning purposes and experimenting with these technologies.
 
+### What can I do with it?
+---
+You can create users with this app and log in to write notes with a title and content. User passwords are hashed with bcrypt and sessions managed with JWT.
 
 ### Installation
 ---
