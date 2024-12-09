@@ -2,6 +2,7 @@ package main
 
 import (
 	"go-notes-app/database"
+	middlewares "go-notes-app/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,6 +13,8 @@ func main() {
 	db := database.ConnectDatabase()
 
 	r.LoadHTMLGlob("templates/*")
+
+	r.Use(middlewares.CheckAuth(db))
 
 	noteHandler := &NoteHandler{DB: db}
 

@@ -32,7 +32,10 @@ func (h *NoteHandler) CreateUser(c *gin.Context) {
 	var authInput models.AuthInput
 
 	if err := c.ShouldBind(&authInput); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		c.HTML(http.StatusBadRequest, "registrationForm.tmpl", gin.H{
+			"title": "Register",
+			"error": "Error en el formulario",
+		})
 		return
 	}
 
@@ -40,13 +43,19 @@ func (h *NoteHandler) CreateUser(c *gin.Context) {
 	h.DB.Where("username=?", authInput.Username).Find(&user)
 
 	if user.ID != 0 {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Username already registered."})
+		c.HTML(http.StatusBadRequest, "registrationForm.tmpl", gin.H{
+			"title": "Register",
+			"error": "Username already registered.",
+		})
 		return
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(authInput.Password), bcrypt.DefaultCost)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.HTML(http.StatusBadRequest, "registrationForm.tmpl", gin.H{
+			"title": "Register",
+			"error": "Error hashing password",
+		})
 		return
 	}
 
@@ -57,28 +66,52 @@ func (h *NoteHandler) CreateUser(c *gin.Context) {
 
 	h.DB.Create(&newUser)
 
-	c.JSON(http.StatusOK, gin.H{"data": newUser})
+	generateToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":  newUser.ID,
+		"exp": time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	token, err := generateToken.SignedString([]byte("NOT-SECRET-KEY"))
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "registrationForm.tmpl", gin.H{
+			"title": "Register",
+			"error": "Error generating token",
+		})
+		return
+	}
+
+	c.SetCookie("Authorization", "Bearer "+token, 3600, "/", "", false, true)
+
+	c.Redirect(http.StatusSeeOther, "/")
 }
 
 func (h *NoteHandler) Login(c *gin.Context) {
 	var authInput models.AuthInput
 
 	if err := c.ShouldBind(&authInput); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		c.HTML(http.StatusBadRequest, "loginForm.tmpl", gin.H{
+			"title": "Login",
+			"error": "Error en el formulario",
+		})
 		return
 	}
 
 	var user models.User
-
 	h.DB.Where("username=?", authInput.Username).Find(&user)
 
 	if user.ID == 0 {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "User not found"})
+		c.HTML(http.StatusUnauthorized, "loginForm.tmpl", gin.H{
+			"title": "Login",
+			"error": "User not found",
+		})
 		return
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(authInput.Password)); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid password"})
+		c.HTML(http.StatusUnauthorized, "loginForm.tmpl", gin.H{
+			"title": "Login",
+			"error": "Invalid password",
+		})
 		return
 	}
 
@@ -89,13 +122,16 @@ func (h *NoteHandler) Login(c *gin.Context) {
 
 	token, err := generateToken.SignedString([]byte("NOT-SECRET-KEY"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		c.HTML(http.StatusBadRequest, "loginForm.tmpl", gin.H{
+			"title": "Login",
+			"error": "Error generating token",
+		})
 		return
 	}
 
-	c.JSON(200, gin.H{
-		"token": token,
-	})
+	c.SetCookie("Authorization", "Bearer "+token, 3600, "/", "", false, true)
+
+	c.Redirect(http.StatusSeeOther, "/")
 }
 
 // Index
