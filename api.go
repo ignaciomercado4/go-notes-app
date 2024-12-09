@@ -134,6 +134,12 @@ func (h *NoteHandler) Login(c *gin.Context) {
 	c.Redirect(http.StatusSeeOther, "/")
 }
 
+func (h *NoteHandler) Logout(c *gin.Context) {
+	c.SetCookie("Authorization", "", -1, "/", "", false, true)
+
+	c.Redirect(http.StatusSeeOther, "/login")
+}
+
 // Index
 func (h *NoteHandler) GetIndex(c *gin.Context) {
 	var notes []models.Note

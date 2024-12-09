@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"go-notes-app/models"
 	"net/http"
-	"os"
 	"strings"
 	"time"
 
@@ -46,7 +45,7 @@ func CheckAuth(db *gorm.DB) gin.HandlerFunc {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 			}
-			return []byte(os.Getenv("SECRET")), nil
+			return []byte("NOT-SECRET-KEY"), nil
 		})
 
 		if err != nil || !token.Valid {
