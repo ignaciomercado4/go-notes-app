@@ -24,7 +24,7 @@ func GetRegistrationForm(c *gin.Context) {
 
 func GetLoginForm(c *gin.Context) {
 	c.HTML(http.StatusOK, "loginForm.tmpl", gin.H{
-		"title": "login",
+		"title": "Login",
 	})
 }
 
