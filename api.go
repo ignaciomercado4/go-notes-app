@@ -174,3 +174,11 @@ func (h *NoteHandler) CreateNote(c *gin.Context) {
 
 	c.Redirect(http.StatusSeeOther, "/")
 }
+
+func (h *NoteHandler) DeleteNote(c *gin.Context) {
+	noteId := c.Param("id")
+
+	h.DB.Delete(&models.User{}, noteId)
+
+	c.Redirect(http.StatusSeeOther, "/")
+}

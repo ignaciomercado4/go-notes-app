@@ -27,6 +27,7 @@ func main() {
 	r.GET("/", noteHandler.GetIndex)
 
 	r.POST("/create", noteHandler.CreateNote)
+	r.DELETE("/delete/:id", noteHandler.DeleteNote)
 
 	r.Run()
 }

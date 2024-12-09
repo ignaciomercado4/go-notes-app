@@ -13,7 +13,12 @@
                 <h1 class="text-3xl font-bold text-center text-gray-800">My notes</h1>
                 
                 
-                    <p class="text-sm font-bold text-center text-red-800" id="error"></p>
+                    <p class="text-sm font-bold text-center text-red-800" id="error">
+                        {{if .error}}
+                            Error: {{ .error }}
+                        {{end}}
+
+                    </p>
 
             </header>
 

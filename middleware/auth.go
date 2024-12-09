@@ -15,14 +15,11 @@ import (
 
 func CheckAuth(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// Primero intenta obtener el token de la cookie
 		tokenString, err := c.Cookie("Authorization")
 		if err != nil {
-			// Si no hay cookie, intenta obtener el token del header
 			authHeader := c.GetHeader("Authorization")
 			if authHeader == "" {
-				// Rutas públicas que no requieren autenticación
-				publicRoutes := []string{"/login", "/register", "/css/", "/js/"}
+				publicRoutes := []string{"/login", "/register"}
 
 				currentPath := c.Request.URL.Path
 				isPublicRoute := false
