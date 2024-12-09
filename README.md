@@ -19,7 +19,12 @@ cd go-notes-app
 go mod tidy
 ```
 
-3. Run the app:
+3. Create a database:
+```
+touch test.db
+```  
+
+4. Run the app:
 ```
 go run *.go
 ```
